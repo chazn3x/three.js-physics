@@ -2,7 +2,7 @@ import './style.css'
 import * as THREE from 'three'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
 import * as dat from 'lil-gui'
-import CANNON from 'cannon'
+import * as CANNON from 'cannon-es'
 
 /**
  * Debug
@@ -35,6 +35,17 @@ debugObject.createBox = () => {
     )
 }
 gui.add(debugObject, 'createBox')
+
+debugObject.reset = () => {
+    for (const object of objectsToUpdate) {
+        // Remove body
+        object.body.removeEventListener('collide', playHitSound)
+        world.removeBody(object.body)
+        // Remove mesh
+        scene.remove(object.mesh)
+    }
+}
+gui.add(debugObject, 'reset')
 
 /**
  * Base
